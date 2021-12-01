@@ -54,6 +54,3 @@ def generate_question(user_utterance, model, tokenizer):
     )
     
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
-
-conf =Config()
-print(conf.MODEL_DIR)
