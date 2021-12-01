@@ -21,17 +21,15 @@ from fastT5 import (
 
 @dataclass(frozen=True)
 class Config:
-    MODEL_DIR: str = "./model/"
+    MODEL_DIR: str = "src/model/BeIR-query-gen-msmarco-t5-large-v1"
 
 
 def onnx_model_init(qg_model):
     
-    # print(Path(qg_model).stem)
-    encoder_path = os.path.join(qg_model, f"{Path(qg_model).stem}-encoder-quantized.onnx")
-    decoder_path = os.path.join(qg_model, f"{Path(qg_model).stem}-decoder-quantized.onnx")
+    encoder_path = os.path.join(qg_model,f"{Path(qg_model).stem}-encoder-quantized.onnx")
+    decoder_path = os.path.join(qg_model,f"{Path(qg_model).stem}-decoder-quantized.onnx")
     init_decoder_path = os.path.join(qg_model, f"{Path(qg_model).stem}-init-decoder-quantized.onnx")
     tokenizer_path = qg_model
-    # print(encoder_path)
     
     model_paths = encoder_path, decoder_path, init_decoder_path
 
