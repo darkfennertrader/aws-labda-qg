@@ -40,7 +40,7 @@ def onnx_model_init(qg_model):
     return model, tokenizer
 
 
-def generate_question(user_utterance, model, tokenizer):
+def generate_questions(user_utterance, model, tokenizer):
     
     input_ids = tokenizer.encode(user_utterance, return_tensors="pt")
     outputs = model.generate(
@@ -51,4 +51,8 @@ def generate_question(user_utterance, model, tokenizer):
         num_return_sequences=3,
     )
     
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    queries =[]
+    for i in range(len(outputs)):
+        queries.append(tokenizer.decode(outputs[i], skip_special_tokens=True))
+        
+    return queries

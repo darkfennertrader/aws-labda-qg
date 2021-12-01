@@ -1,5 +1,5 @@
 import json
-from config import Config, onnx_model_init, generate_question
+from config import Config, onnx_model_init, generate_questions
 
 conf = Config()
 qg_model, qg_tokenizer = onnx_model_init(conf.MODEL_DIR)
@@ -11,10 +11,11 @@ def lambda_handler(event, context):
     
     user_utterance = event["user_utterance"]
     
-    query = generate_question(user_utterance, qg_model, qg_tokenizer)
+    queries = generate_questions(user_utterance, qg_model, qg_tokenizer)
 
     return {
         "user_utterance": user_utterance,
-        "query": query,
+        "no_of_queries": len(queries),
+        "generated_queries": queries,
         "statusCode": 200,
     }
