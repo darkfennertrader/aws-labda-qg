@@ -1,7 +1,8 @@
 import json
 from config import Config, onnx_model_init, generate_question
 
-qg_model, qg_tokenizer = onnx_model_init(qg_model)
+conf = Config()
+qg_model, qg_tokenizer = onnx_model_init(conf.MODEL_DIR)
 
 def lambda_handler(event, context):
     

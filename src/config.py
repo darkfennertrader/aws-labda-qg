@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from dataclasses import dataclass
 
 from transformers import (
     T5Config,
@@ -18,20 +19,18 @@ from fastT5 import (
     OnnxT5,
 )
 
-# default config
-class Config(object):
-    REGION = "eu-west-1"
-    # memcache local address
-    MODEL_DIR = "./model/"
-    
-    
+@dataclass(frozen=True)
+class Config:
+    MODEL_DIR: str = "./model/"
+
+
 def onnx_model_init(qg_model):
     
     # print(Path(qg_model).stem)
-    encoder_path = os.path.join(qg_model, f"onnx/{Path(qg_model).stem}-encoder-quantized.onnx")
-    decoder_path = os.path.join(qg_model, f"onnx/{Path(qg_model).stem}-decoder-quantized.onnx")
-    init_decoder_path = os.path.join(qg_model, f"onnx/{Path(qg_model).stem}-init-decoder-quantized.onnx")
-    tokenizer_path = os.path.join(qg_model,"onnx")
+    encoder_path = os.path.join(qg_model, f"{Path(qg_model).stem}-encoder-quantized.onnx")
+    decoder_path = os.path.join(qg_model, f"{Path(qg_model).stem}-decoder-quantized.onnx")
+    init_decoder_path = os.path.join(qg_model, f"{Path(qg_model).stem}-init-decoder-quantized.onnx")
+    tokenizer_path = qg_model
     # print(encoder_path)
     
     model_paths = encoder_path, decoder_path, init_decoder_path
@@ -55,3 +54,6 @@ def generate_question(user_utterance, model, tokenizer):
     )
     
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+conf =Config()
+print(conf.MODEL_DIR)
