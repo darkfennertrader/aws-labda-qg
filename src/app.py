@@ -14,8 +14,7 @@ def lambda_handler(event, context):
     query = generate_question(user_utterance, qg_model, qg_tokenizer)
 
     return {
-        "header": header,
-        "body": json.dump(payload),
-        "query": json.dump(query),
+        "user_utterance": user_utterance,
+        "query": query,
         "statusCode": 200,
     }
