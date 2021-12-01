@@ -15,7 +15,7 @@ def lambda_handler(event, context):
 
     return {
         "header": header,
-        "body": json.dumps(payload),
-        "query": json.dumps(query),
+        "body": json.dump(payload),
+        "query": json.dump(query),
         "statusCode": 200,
     }

@@ -21,7 +21,7 @@ from fastT5 import (
 
 @dataclass(frozen=True)
 class Config:
-    MODEL_DIR: str = "src/model/BeIR-query-gen-msmarco-t5-large-v1"
+    MODEL_DIR: str = "./model/BeIR-query-gen-msmarco-t5-large-v1"
 
 
 def onnx_model_init(qg_model):
