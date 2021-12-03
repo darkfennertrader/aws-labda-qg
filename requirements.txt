@@ -1,2 +1,4 @@
+-f https://download.pytorch.org/whl/cpu/torch_stable.html
+torch==1.7.1
 fastT5==0.0.7
 psutil==5.8.0
