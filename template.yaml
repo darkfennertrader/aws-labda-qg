@@ -21,28 +21,28 @@ Resources:
       MemorySize: 10240
       AutoPublishAlias: demo
       DeploymentPreference:
-        Type: AllAtOnce
+        Type: AllAtOnce # Or Canary10Percent5Minutes, Linear10PercentEvery1Minute, ...
 
   ScheduleConcurrency:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
     Properties:
       MaxCapacity: 2
       MinCapacity: 0
-      ResourceId: !Sub function:${QuestionGeneratorDemo}:demo
+      ResourceId: !Sub function:${QuestionGeneratorDemo}:demo # You need to specify an alis or version here
       RoleARN: !Sub arn:aws:iam::${AWS::AccountId}:role/aws-service-role/lambda.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_LambdaConcurrency
       ScalableDimension: lambda:function:ProvisionedConcurrency
       ServiceNamespace: lambda
       ScheduledActions:                                   
       - ScalableTargetAction:
           MinCapacity: 2
-        Schedule: 'cron(45 7 ? * MON,TUE,WED,THU,FRI *)'
+        Schedule: 'cron(45 8 ? * MON,TUE,WED,THU,FRI *)'
         ScheduledActionName: scale-out
       - ScalableTargetAction:
           MinCapacity: 0
           MaxCapacity: 0
-        Schedule: 'cron(0 19 ? * MON,TUE,WED,THU,FRI *)'
+        Schedule: 'cron(0 20 ? * MON,TUE,WED,THU,FRI *)'
         ScheduledActionName: scale-in
-    DependsOn: QuestionGeneratorDemoAliasdemo  
+    DependsOn: QuestionGeneratorDemoAliasdemo  # This is your function logical ID + "Alias" + what you use for AutoPublishAlias
 
 
 
