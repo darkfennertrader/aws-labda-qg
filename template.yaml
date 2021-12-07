@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AI-Query-Generator lambda function with Provisioned Concurrency
+
+
+# Globals:
+#   Function:
+#     Timeout: 900
+#     MemorySize: 10240
+#     Runtime: python3.8
+#     Architectures:
+#       - x86_64
+
+Resources:
+  QuestionGeneratorDemo:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: 044393563897.dkr.ecr.eu-west-1.amazonaws.com/lambda-container-question-generator:dev-2.0
+      Timeout: 900
+      MemorySize: 10240
+      AutoPublishAlias: demo
+      DeploymentPreference:
+        Type: AllAtOnce
+
+  ScheduleConcurrency:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    Properties:
+      MaxCapacity: 2
+      MinCapacity: 0
+      ResourceId: !Sub function:${QuestionGeneratorDemo}:demo
+      RoleARN: !Sub arn:aws:iam::${AWS::AccountId}:role/aws-service-role/lambda.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_LambdaConcurrency
+      ScalableDimension: lambda:function:ProvisionedConcurrency
+      ServiceNamespace: lambda
+      ScheduledActions:                                   
+      - ScalableTargetAction:
+          MinCapacity: 2
+        Schedule: 'cron(45 7 ? * MON,TUE,WED,THU,FRI *)'
+        ScheduledActionName: scale-out
+      - ScalableTargetAction:
+          MinCapacity: 0
+          MaxCapacity: 0
+        Schedule: 'cron(0 19 ? * MON,TUE,WED,THU,FRI *)'
+        ScheduledActionName: scale-in
+    DependsOn: QuestionGeneratorDemoAliasdemo  
+
+
+
+
+
+    # if building docker image from SAM template.yaml (put dockerfile and requirements.txt into the src dir)  
+    # Metadata:
+    #   Dockerfile: Dockerfile
+    #   DockerContext: ./src
+    #   DockerTag: demo
+    
+
